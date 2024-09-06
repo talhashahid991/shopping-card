@@ -18,7 +18,7 @@ export class User {
   @IsString()
   name: string;
 
-  @Column({ unique: true })
+  @Column(/*{ unique: true }*/)
   @IsNotEmpty()
   @IsString()
   username: string;
