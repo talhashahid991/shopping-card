@@ -27,10 +27,9 @@ export class ItemService {
     const item = this.itemsRepository.create({
       item_name: createItemDto.item_name,
       price: createItemDto.price,
+      category_id: category,
       dml_status: 1, // Set dml_status to 1 for insert
     });
-
-    item.category_id = category;
 
     return this.itemsRepository.save(item);
   }

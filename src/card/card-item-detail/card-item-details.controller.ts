@@ -9,7 +9,7 @@ import { FindOneCardItemDetailDto } from './dto/findOne-card-item-detail.dto';
 export class CardItemDetailsController {
   constructor(private readonly cardItemDetailsService: CardItemDetailsService) {}
 
-  @Post('createCardItemDetail')
+  @Post('addCardItemDetail')
   create(@Body() createCardItemDetailsDto: CreateCardItemDetailsDto) {
     return this.cardItemDetailsService.create(createCardItemDetailsDto);
   }

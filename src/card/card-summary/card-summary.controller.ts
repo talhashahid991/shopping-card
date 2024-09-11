@@ -10,7 +10,7 @@ import { GetSoldHistoryDto } from './dto/soldHistory-card-summary.dto';
 export class CardSummaryController {
   constructor(private readonly cardSummaryService: CardSummaryService) {}
 
-  @Post('createCardSummary')
+  @Post('addCardSummary')
   create(@Body() createCardSummaryDto: CreateCardSummaryDto) {
     return this.cardSummaryService.create(createCardSummaryDto);
   }
