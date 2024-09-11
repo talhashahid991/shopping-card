@@ -35,7 +35,7 @@ export class CardSummaryController {
     return this.cardSummaryService.update(updateCardSummaryDto);
   }
 
-  @Post('deleteCategory')
+  @Post('deleteCardSummary')
   remove(@Body() findOneCardSummaryDto: FindOneCardSummaryDto) {
     return this.cardSummaryService.remove(findOneCardSummaryDto);
   }
