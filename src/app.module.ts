@@ -1,14 +1,15 @@
 import { Module } from '@nestjs/common';
 import { AppController } from './app.controller';
 import { AppService } from './app.service';
-import { ItemModule } from './card/modules/item.module';
+
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { ConfigModule, ConfigService } from '@nestjs/config';
 import { join } from 'path';
-import { CategoryModule } from './card/modules/category.module';
-import { CardSummaryModule } from './card/modules/card-summary.module';
-import { UserModule } from './card/modules/user.module';
-import { CardItemDetailsModule } from './card/modules/card-item-detail.module';
+import { CategoryModule } from './card/category/category.module';
+import { CardSummaryModule } from './card/card-summary/card-summary.module';
+import { CardItemDetailsModule } from './card/card-item-detail/card-item-detail.module';
+import { UserModule } from './card/user/user.module';
+import { ItemModule } from './card/item/item.module';
 
 @Module({
   imports: [

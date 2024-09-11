@@ -1,6 +1,6 @@
 import { ValidatorConstraint, ValidatorConstraintInterface, ValidationArguments, registerDecorator, ValidationOptions } from 'class-validator';
 import { getRepository } from 'typeorm';
-import { User } from '../entities/user.entity';
+import { User } from '../user/entities/user.entity';
 
 @ValidatorConstraint({ async: true })
 export class IsUniqueUsername implements ValidatorConstraintInterface {

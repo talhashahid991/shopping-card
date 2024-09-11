@@ -1,8 +1,8 @@
-import { CardItemDetails } from 'src/card/entities/card-item-detail.entity';
-import { CardSummary } from 'src/card/entities/card-summary';
-import { Category } from 'src/card/entities/category.entity';
-import { Item } from 'src/card/entities/item.entity';
-import { User } from 'src/card/entities/user.entity';
+import { Category } from 'src/card/category/entities/category.entity';
+import { CardItemDetails } from 'src/card/card-item-detail/entities/card-item-detail.entity';
+import { CardSummary } from 'src/card/card-summary/entities/card-summary.entity';
+import { Item } from 'src/card/item/entities/item.entity';
+import { User } from 'src/card/user/entities/user.entity';
 import { DataSource } from 'typeorm';
 
 
