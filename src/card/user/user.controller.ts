@@ -5,7 +5,7 @@ import { UpdateUserDto } from './dto/update-user.dto';
 import { FindOneUserDto } from './dto/findOne-user.dto';
 
 
-@Controller('users')
+@Controller('Users')
 export class UserController {
   constructor(private readonly userService: UserService) {}
 

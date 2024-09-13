@@ -5,7 +5,7 @@ import { UpdateCategoryDto } from '../category/dto/update-category.dto';
 import { FindOneCategoryDto } from './dto/findOne-category.dto';
 
 
-@Controller('categories')
+@Controller('Categories')
 export class CategoryController {
   constructor(private readonly categoryService: CategoryService) {}
 

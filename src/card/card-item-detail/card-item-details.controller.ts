@@ -5,7 +5,7 @@ import { UpdateCardItemDetailsDto } from './dto/update-card-item-details.dto';
 import { FindOneCardItemDetailDto } from './dto/findOne-card-item-detail.dto';
 
 
-@Controller('card-item-detail')
+@Controller('CardItemDetail')
 export class CardItemDetailsController {
   constructor(private readonly cardItemDetailsService: CardItemDetailsService) {}
 

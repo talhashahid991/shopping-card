@@ -52,8 +52,21 @@ export class CardSummaryService {
   }
 
   async getSoldHistory(shopKeepId: number): Promise<CardSummary[]> {
+    const shopKeep = await this.cardSummaryRepository.findOne({
+      where: {
+        shopKeepId: {
+          userId: shopKeepId,
+          userType: UserType.SHOP_KEEP
+        }
+      }
+    });
+
+    if (!shopKeep) {
+      throw new NotFoundException(`No sales associated with Shopkeeper: ID ${shopKeepId} Or Shopkeeper not found`);
+    }
+
     return this.cardSummaryRepository.createQueryBuilder('cardSummary')
-      .innerJoinAndSelect('cardSummary.shop_keep_id', 'user')
+      .innerJoinAndSelect('cardSummary.shopKeepId', 'user')
       .where('user.user_id = :shopKeepId', { shopKeepId })
       .andWhere('user.user_type = :userType', { userType: 'shopkeep' })
       .andWhere('cardSummary.sold_status = :soldStatus', { soldStatus: true })

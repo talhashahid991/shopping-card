@@ -6,7 +6,7 @@ import { FindOneCardSummaryDto } from './dto/findOne-card-summary.dto';
 import { CardSummary } from './entities/card-summary.entity';
 import { GetSoldHistoryDto } from './dto/soldHistory-card-summary.dto';
 
-@Controller('card-summary')
+@Controller('CardSummary')
 export class CardSummaryController {
   constructor(private readonly cardSummaryService: CardSummaryService) {}
 
