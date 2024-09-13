@@ -10,20 +10,20 @@ export enum UserType {
 
 @Entity()
 export class User {
-  @PrimaryGeneratedColumn()
-  user_id: number;
+  @PrimaryGeneratedColumn({name: 'user_id'})
+  userId: number;
 
-  @Column()
+  @Column({name: 'name'})
   @IsNotEmpty()
   @IsString()
   name: string;
 
-  @Column(/*{ unique: true }*/)
+  @Column({name: 'username'})
   @IsNotEmpty()
   @IsString()
   username: string;
 
-  @Column()
+  @Column({name: 'password'})
   @IsNotEmpty()
   @Length(6, 12)
   @Matches(/^(?=.*[A-Z])(?=.*[a-z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{6,12}$/, {
@@ -31,18 +31,18 @@ export class User {
   })
   password: string;
 
-  @Column()
+  @Column({name: 'user_type'})
   @IsEnum(UserType)
-  user_type: UserType;
+  userType: UserType;
 
-  @Column()
+  @Column({name: 'dml_status'})
   @IsNotEmpty()
-  dml_status: number;
+  dmlStatus: number;
 
-  @OneToMany(() => CardSummary, cardSummary => cardSummary.shop_keep_id)
+  @OneToMany(() => CardSummary, cardSummary => cardSummary.shopKeepId)
   shopKeeps: CardSummary[];
 
-  @OneToMany(() => CardSummary, cardSummary => cardSummary.customer_id)
+  @OneToMany(() => CardSummary, cardSummary => cardSummary.customerId)
   customers: CardSummary[];
 
   // @BeforeRemove()

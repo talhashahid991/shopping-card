@@ -2,13 +2,13 @@ import { IsDecimal, IsInt, IsNumber } from 'class-validator';
 
 export class CreateCardItemDetailsDto {
   @IsInt()
-  card_summary_id: number;
+  cardSummaryId: number;
 
   @IsInt()
-  item_id: number;
+  itemId: number;
 
   @IsNumber()
-  item_price: number;
+  itemPrice: number;
 
   @IsInt()
   quantity: number;

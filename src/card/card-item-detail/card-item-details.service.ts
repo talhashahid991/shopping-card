@@ -21,22 +21,22 @@ export class CardItemDetailsService {
   ) {}
 
   async create(createCardItemDetailsDto: CreateCardItemDetailsDto): Promise<CardItemDetails> {
-    const cardSummary = await this.cardSummaryRepository.findOneBy({ card_summary_id: createCardItemDetailsDto.card_summary_id });
+    const cardSummary = await this.cardSummaryRepository.findOneBy({ cardSummaryId: createCardItemDetailsDto.cardSummaryId });
     if (!cardSummary) {
       throw new Error('Card summary not found');
     }
 
-    const item = await this.itemRepository.findOneBy({ item_id: createCardItemDetailsDto.item_id });
+    const item = await this.itemRepository.findOneBy({ itemId: createCardItemDetailsDto.itemId });
     if (!item) {
       throw new Error('Item not found');
     }
 
     const cardItemDetails = this.cardItemDetailsRepository.create({
-      item_price: createCardItemDetailsDto.item_price,
+      itemPrice: createCardItemDetailsDto.itemPrice,
       quantity: createCardItemDetailsDto.quantity,
-      card_summary: cardSummary,
+      cardSummary: cardSummary,
       item: item,
-      dml_status: 1,
+      dmlStatus: 1,
     });
 
     return this.cardItemDetailsRepository.save(cardItemDetails);
@@ -48,10 +48,10 @@ export class CardItemDetailsService {
 
   async findOne(params: FindOneCardItemDetailDto): Promise<CardItemDetails> {
     const category = await this.cardItemDetailsRepository.findOne({ 
-      where : {card_item_details_id: params?.card_item_details_id}   
+      where : {cardItemDetailsId: params?.cardItemDetailsId}   
     });
-    if (!category || category.dml_status === 2) {
-      throw new NotFoundException(`Detail with ID ${params.card_item_details_id} not found or has been deleted`);
+    if (!category || category.dmlStatus === 2) {
+      throw new NotFoundException(`Detail with ID ${params.cardItemDetailsId} not found or has been deleted`);
     }
     return category;
   }
@@ -59,24 +59,24 @@ export class CardItemDetailsService {
   async update(updateCardItemDetailsDto: UpdateCardItemDetailsDto): Promise<CardItemDetails> {
     const cardItemDetails = await this.cardItemDetailsRepository.findOne({
       where: {
-        card_item_details_id: updateCardItemDetailsDto?.card_item_details_id,
-        dml_status: Not(2),
+        cardItemDetailsId: updateCardItemDetailsDto?.cardItemDetailsId,
+        dmlStatus: Not(2),
       },
     });
     if (!cardItemDetails) {
       throw new Error('Card item details not found');
     }
 
-    if (updateCardItemDetailsDto.card_summary_id) {
-      const cardSummary = await this.cardSummaryRepository.findOneBy({ card_summary_id: updateCardItemDetailsDto.card_summary_id });
+    if (updateCardItemDetailsDto.cardSummaryId) {
+      const cardSummary = await this.cardSummaryRepository.findOneBy({ cardSummaryId: updateCardItemDetailsDto.cardSummaryId });
       if (!cardSummary) {
         throw new Error('Card summary not found');
       }
-      cardItemDetails.card_summary = cardSummary;
+      cardItemDetails.cardSummary = cardSummary;
     }
 
-    if (updateCardItemDetailsDto.item_id) {
-      const item = await this.itemRepository.findOneBy({ item_id: updateCardItemDetailsDto.item_id });
+    if (updateCardItemDetailsDto.itemId) {
+      const item = await this.itemRepository.findOneBy({ itemId: updateCardItemDetailsDto.itemId });
       if (!item) {
         throw new Error('Item not found');
       }
@@ -84,23 +84,24 @@ export class CardItemDetailsService {
     }
 
     Object.assign(cardItemDetails, updateCardItemDetailsDto);
-    cardItemDetails.dml_status = 3;
+    cardItemDetails.dmlStatus = 3;
     return this.cardItemDetailsRepository.save(cardItemDetails);
   }
 
   async remove(params: FindOneCardItemDetailDto) {
     const res = await this.cardItemDetailsRepository.findOne({
       where: {
-        card_item_details_id: params?.card_item_details_id,
-        dml_status: Not(2),
+        cardItemDetailsId: params?.cardItemDetailsId,
+        dmlStatus: Not(2),
       },
     });
 
     if (!res) {
-      throw new NotFoundException(`Detail with ID ${params.card_item_details_id} not found or has been deleted`);
+      throw new NotFoundException(`Detail with ID ${params.cardItemDetailsId} not found or has been deleted`);
     }
 
-    res.dml_status = 2; // Set dml_status to 2 for delete
+    res.dmlStatus = 2; // Set dml_status to 2 for delete
     await this.cardItemDetailsRepository.save(res);  
+    return this.cardItemDetailsRepository.find();
   }
 }

@@ -6,25 +6,26 @@ import { Category } from 'src/card/category/entities/category.entity';
 
 @Entity()
 export class Item {
-  @PrimaryGeneratedColumn()
-  item_id: number;
 
-  @Column()
+  @PrimaryGeneratedColumn({name: 'item_id'})
+  itemId: number;
+
+  @Column({name: 'item_name'})
   @IsNotEmpty()
-  item_name: string;
+  itemName: string;
 
-  @Column('decimal')
+  @Column('decimal',{name: 'price'})
   @IsNotEmpty()
   price: number;
 
   @ManyToOne(() => Category, category => category.items)
-  category_id: Category;
+  categoryId: Category;
 
-  @Column()
+  @Column({name: 'dml_status'})
   @IsNotEmpty()
-  dml_status: number;
+  dmlStatus: number;
 
-  @OneToMany(() => CardItemDetails, cardItemDetail => cardItemDetail.card_item_details_id)
-  card_item_details: CardItemDetails[];
+  @OneToMany(() => CardItemDetails, cardItemDetail => cardItemDetail.cardItemDetailsId)
+  cardItemDetails: CardItemDetails[];
 
 }

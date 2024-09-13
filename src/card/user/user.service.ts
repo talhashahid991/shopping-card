@@ -23,13 +23,13 @@ export class UserService {
         name: createUserDto.name,
         username: createUserDto.username,
         password: createUserDto.password,
-        user_type: createUserDto.user_type,
-        dml_status: 1}) // Set dml_status to 1 for insert});
+        userType: createUserDto.userType,
+        dmlStatus: 1}) // Set dml_status to 1 for insert});
       
       const userExist = await this.userRepository.find({
         where :{
           username: createUserDto?.username,
-          dml_status:Not(2),
+          dmlStatus:Not(2),
         }
       })
       if(userExist.length > 0){
@@ -46,35 +46,45 @@ export class UserService {
   async update(updateUserDto: UpdateUserDto) {
     const user = await this.userRepository.find({
       where: {
-        user_id: updateUserDto?.user_id,
-        dml_status:Not(2),
+        userId: updateUserDto?.userId,
+        dmlStatus:Not(2),
       },
     });
+
+    const userExist = await this.userRepository.find({
+      where :{
+        username: updateUserDto?.username,
+        dmlStatus:Not(2),
+      }
+    })
+    if(userExist.length > 0){
+        throw new BadRequestException('Username already exists');
+    }
       
     if (user.length > 0) {
       const res = await this.userRepository.save({
         ...updateUserDto,
-        dml_status: 3, //dml_Status to 3 for update
+        dmlStatus: 3, //dml_Status to 3 for update
       });
       return await this.userRepository.find({
-        where: { user_id: res?.user_id },
+        where: { userId: res?.userId },
       });
       } else {
-        throw new NotFoundException(`User with ID ${updateUserDto.user_id} not found or has been deleted`);
+        throw new NotFoundException(`User with ID ${updateUserDto.userId} not found or has been deleted`);
       }
     }
 
 
   findAll(): Promise<User[]> {
-    return this.userRepository.find({ where: { dml_status: Not(2) } });
+    return this.userRepository.find({ where: { dmlStatus: Not(2) } });
   }
 
   async findOne(params: FindOneUserDto): Promise<User> {
     const user = await this.userRepository.findOne({ 
-      where : {user_id: params?.user_id}   
+      where : {userId: params?.userId}   
     });
-    if (!user || user.dml_status === 2) {
-      throw new NotFoundException(`User with ID ${params.user_id} not found or has been deleted`);
+    if (!user || user.dmlStatus === 2) {
+      throw new NotFoundException(`User with ID ${params.userId} not found or has been deleted`);
     }
     return user;
   }
@@ -82,24 +92,25 @@ export class UserService {
   async remove(params: FindOneUserDto) {
     const res = await this.userRepository.findOne({
       where: {
-        user_id: params?.user_id,
-        dml_status: Not(2),
+        userId: params?.userId,
+        dmlStatus: Not(2),
       },
     });
 
     if (!res) {
-      throw new NotFoundException(`User with ID ${params.user_id} not found or has been removed already.`);
+      throw new NotFoundException(`User with ID ${params.userId} not found or has been removed already.`);
     }
 
     const sales = await this.cardSummaryRepository.find({
-      where: [{ shop_keep_id: res }, { customer_id: res }],
+      where: [{ shopKeepId: res }, { customerId: res }],
     });
 
     if (sales.length > 0) {
       throw new BadRequestException('User cannot be deleted because there are sales associated with this user.');
     }
 
-    res.dml_status = 2; // Set dml_status to 2 for delete
+    res.dmlStatus = 2; // Set dml_status to 2 for delete
     await this.userRepository.save(res);  
+    return this.userRepository.find({ where: { dmlStatus: Not(2) } });
   }
 }

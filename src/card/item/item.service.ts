@@ -19,16 +19,16 @@ export class ItemService {
 
   async create(createItemDto: CreateItemDto): Promise<Item> {
     // look for entered category of an item, if category exists, then proceed
-    const category = await this.categoryRepository.findOneBy({ category_id: createItemDto.category_id });
+    const category = await this.categoryRepository.findOneBy({ categoryId: createItemDto.categoryId });
     if (!category) {
       throw new NotFoundException('Category not found');
     }
 
     const item = this.itemsRepository.create({
-      item_name: createItemDto.item_name,
+      itemName: createItemDto.itemName,
       price: createItemDto.price,
-      category_id: category,
-      dml_status: 1, // Set dml_status to 1 for insert
+      categoryId: category,
+      dmlStatus: 1, // Set dml_status to 1 for insert
     });
 
     return this.itemsRepository.save(item);
@@ -38,40 +38,40 @@ export class ItemService {
   async update(updateItemDto: UpdateItemDto) {
     const item = await this.itemsRepository.findOne({
       where: {
-        item_id: updateItemDto?.item_id,
-        dml_status: Not(2),
+        itemId: updateItemDto?.itemId,
+        dmlStatus: Not(2),
       },
     });
-    if (!item || item.dml_status === 2) {
-      throw new NotFoundException(`Item with ID ${updateItemDto.item_id} not found or has been deleted`);
+    if (!item || item.dmlStatus === 2) {
+      throw new NotFoundException(`Item with ID ${updateItemDto.itemId} not found or has been deleted`);
     }  
 
-    if (updateItemDto.category_id) {
-      const category = await this.categoryRepository.findOneBy({ category_id: updateItemDto.category_id });
+    if (updateItemDto.categoryId) {
+      const category = await this.categoryRepository.findOneBy({ categoryId: updateItemDto.categoryId });
       if (!category) {
         throw new NotFoundException('Category not found');
       }
-      item.category_id = category;
+      item.categoryId = category;
     }
     Object.assign(item, updateItemDto);
-    item.dml_status = 3; // Set dml_status to 3 for update
+    item.dmlStatus = 3; // Set dml_status to 3 for update
     const res = await this.itemsRepository.save(item);
     return await this.itemsRepository.find({
-      where: { item_id: res?.item_id },
+      where: { itemId: res?.itemId },
     });
   }
 
 
   findAll(): Promise<Item[]> {
-    return this.itemsRepository.find({ where: { dml_status: Not(2) } });
+    return this.itemsRepository.find({ where: { dmlStatus: Not(2) } });
   }
 
   async findOne(params: FindOneItemDto): Promise<Item> {
     const user = await this.itemsRepository.findOne({ 
-      where : {item_id: params?.item_id}   
+      where : {itemId: params?.itemId}   
     });
-    if (!user || user.dml_status === 2) {
-      throw new NotFoundException(`Item with ID ${params.item_id} not found or has been deleted`);
+    if (!user || user.dmlStatus === 2) {
+      throw new NotFoundException(`Item with ID ${params.itemId} not found or has been deleted`);
     }
     return user;
   }
@@ -79,16 +79,17 @@ export class ItemService {
   async remove(params: FindOneItemDto) {
     const res = await this.itemsRepository.findOne({
       where: {
-        item_id: params?.item_id,
-        dml_status: Not(2),
+        itemId: params?.itemId,
+        dmlStatus: Not(2),
       },
     });
 
     if (!res) {
-      throw new NotFoundException(`User with ID ${params.item_id} not found or has been deleted`);
+      throw new NotFoundException(`User with ID ${params.itemId} not found or has been deleted`);
     }
 
-    res.dml_status = 2; // Set dml_status to 2 for delete
+    res.dmlStatus = 2; // Set dml_status to 2 for delete
     await this.itemsRepository.save(res);  
+    return this.itemsRepository.find({ where: { dmlStatus: Not(2) } });
   }
 }

@@ -2,19 +2,19 @@ import { IsDecimal, IsInt, IsDate, IsBoolean, IsNumber, IsDateString } from 'cla
 
 export class CreateCardSummaryDto {
   @IsNumber()
-  total_amount: number;
+  totalAmount: number;
 
   @IsInt()
-  shop_keep_id: number;
+  shopKeepId: number;
 
   @IsInt()
-  customer_id: number;
+  customerId: number;
 
   @IsDateString()
-  sale_date: string;
+  saleDate: string;
 
   @IsBoolean()
-  sold_status: boolean;
+  soldStatus: boolean;
 }
 
   

@@ -21,9 +21,9 @@ export class CreateUserDto {
 
   @IsNotEmpty()
   @IsEnum(UserType, {
-    message: 'user_type must be one of the following values: shopkeep, customer',
+    message: 'userType must be one of the following values: shopkeep, customer',
   })
-  user_type: UserType;
+  userType: UserType;
 
 }
 

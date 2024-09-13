@@ -4,21 +4,21 @@ import { Item } from 'src/card/item/entities/item.entity';
 
 @Entity()
 export class Category {
-  @PrimaryGeneratedColumn()
-  category_id: number;
+  @PrimaryGeneratedColumn({name: 'category_id'})
+  categoryId: number;
 
-  @Column()
+  @Column({name: 'title'})
   @IsNotEmpty()
   title: string;
 
-  @Column()
+  @Column({name: 'description'})
   @IsNotEmpty()
   description: string;
 
-  @Column()
+  @Column({name: 'dml_status'})
   @IsNotEmpty()
-  dml_status: number;
+  dmlStatus: number;
 
-  @OneToMany(() => Item, item => item.category_id)
+  @OneToMany(() => Item, item => item.categoryId)
   items: Item[];
 }

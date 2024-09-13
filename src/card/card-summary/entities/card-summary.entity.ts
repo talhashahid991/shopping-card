@@ -6,33 +6,33 @@ import { IsNotEmpty } from 'class-validator';
 
 @Entity()
 export class CardSummary {
-  @PrimaryGeneratedColumn()
-  card_summary_id: number;
+  @PrimaryGeneratedColumn({name: 'card_summary_id'})
+  cardSummaryId: number;
 
-  @Column()
+  @Column({name: 'total_amount'})
   @IsNotEmpty()
-  total_amount: number;
+  totalAmount: number;
 
   
   @ManyToOne(() => User, user => user.shopKeeps)
-  shop_keep_id: User;
+  shopKeepId: User;
 
   @ManyToOne(() => User, user => user.customers)
-  customer_id: User
+  customerId: User
 
-  @Column()
+  @Column({name: 'sale_date'})
   @IsNotEmpty()
-  sale_date: string;
+  saleDate: string;
 
-  @Column()
+  @Column({name: 'dml_status'})
   @IsNotEmpty()
-  dml_status: number;
+  dmlStatus: number;
 
-  @Column()
+  @Column({name: 'sold_status'})
   @IsNotEmpty()
-  sold_status: boolean;
+  soldStatus: boolean;
   
-  @OneToMany(() => CardItemDetails, cardItemDetails => cardItemDetails.card_summary)
+  @OneToMany(() => CardItemDetails, cardItemDetails => cardItemDetails.cardSummary)
   cardItemDetails: CardItemDetails[];
 }
 

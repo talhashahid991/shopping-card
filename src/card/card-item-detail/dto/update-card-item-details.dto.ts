@@ -4,5 +4,5 @@ import { IsNumber } from 'class-validator';
 
 export class UpdateCardItemDetailsDto extends PartialType(CreateCardItemDetailsDto) {
     @IsNumber()
-    card_item_details_id: number;
+    cardItemDetailsId: number;
 }

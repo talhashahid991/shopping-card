@@ -5,6 +5,6 @@ import { IsNumber } from 'class-validator';
 
 export class UpdateCardSummaryDto extends PartialType(CreateCardSummaryDto) {
     @IsNumber()
-    card_summary_id: number;
+    cardSummaryId: number;
 }
 //this makes mapped type of create class which makes all create fields optional for updation
