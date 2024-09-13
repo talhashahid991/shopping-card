@@ -25,12 +25,12 @@ export class CardSummaryController {
     return this.cardSummaryService.findOne(findOneCardSummaryDto);
   }
 
-  @Post('geSoldHistory') 
+  @Post('getSoldHistory') 
   async getSoldHistory(@Body() getSoldHistoryDto: GetSoldHistoryDto): Promise<CardSummary[]> { 
     return this.cardSummaryService.getSoldHistory(getSoldHistoryDto.shopKeepId); 
   } 
 
-  @Post('updateCardSummry')
+  @Post('updateCardSummary')
   update(@Body() updateCardSummaryDto: UpdateCardSummaryDto) {
     return this.cardSummaryService.update(updateCardSummaryDto);
   }

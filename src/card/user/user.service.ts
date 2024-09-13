@@ -88,7 +88,7 @@ export class UserService {
     });
 
     if (!res) {
-      throw new NotFoundException(`User with ID ${params.user_id} not found or has been deleted`);
+      throw new NotFoundException(`User with ID ${params.user_id} not found or has been removed already.`);
     }
 
     const sales = await this.cardSummaryRepository.find({
