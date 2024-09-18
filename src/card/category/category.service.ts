@@ -72,6 +72,5 @@ export class CategoryService {
 
     res.dmlStatus = 2; // Set dml_status to 2 for delete
     await this.categoriesRepository.save(res);
-    return this.categoriesRepository.find({ where: { dmlStatus: Not(2) } });  
   }
 }

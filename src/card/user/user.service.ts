@@ -18,7 +18,6 @@ export class UserService {
   ) {}
 
   async create(createUserDto: CreateUserDto): Promise<User> {
-    try {
       const user = this.userRepository.create({
         name: createUserDto.name,
         username: createUserDto.username,
@@ -35,16 +34,11 @@ export class UserService {
       if(userExist.length > 0){
           throw new BadRequestException('Username already exists');
       }
-
       return this.userRepository.save(user);
-    } catch(e){
-      return e
-    }
-    
   }
 
   async update(updateUserDto: UpdateUserDto) {
-    const user = await this.userRepository.find({
+    const user = await this.userRepository.findOne({
       where: {
         userId: updateUserDto?.userId,
         dmlStatus:Not(2),
@@ -61,7 +55,7 @@ export class UserService {
         throw new BadRequestException('Username already exists');
     }
       
-    if (user.length > 0) {
+    if (user) {
       const res = await this.userRepository.save({
         ...updateUserDto,
         dmlStatus: 3, //dml_Status to 3 for update
@@ -111,6 +105,5 @@ export class UserService {
 
     res.dmlStatus = 2; // Set dml_status to 2 for delete
     await this.userRepository.save(res);  
-    return this.userRepository.find({ where: { dmlStatus: Not(2) } });
   }
 }

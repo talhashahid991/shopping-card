@@ -5,11 +5,12 @@ import { CardItemDetailsController } from './card-item-details.controller';
 import { CardItemDetailsService } from './card-item-details.service';
 import { CardSummaryModule } from '../card-summary/card-summary.module';
 import { ItemModule } from '../item/item.module';
+import { UserModule } from '../user/user.module';
 
 
 
 @Module({
-  imports: [TypeOrmModule.forFeature([CardItemDetails]),CardSummaryModule,ItemModule],
+  imports: [TypeOrmModule.forFeature([CardItemDetails]),CardSummaryModule,ItemModule,UserModule],
   controllers: [CardItemDetailsController],
   providers: [CardItemDetailsService],
 })

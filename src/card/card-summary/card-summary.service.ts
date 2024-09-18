@@ -17,6 +17,9 @@ export class CardSummaryService {
   ) {}
 
   async create(createCardSummaryDto: CreateCardSummaryDto): Promise<CardSummary> {
+    //confusion can occur here because shopkeep n customer ids are being passed as types of userRepository directly to 
+    //cardSummaryRepository. Type numbers for these id's in createCardSummary are only being used as input comparison 
+    //for searching the existence of user type
     const shopKeep = await this.userRepository.findOneBy({ userId: createCardSummaryDto.shopKeepId, userType: UserType.SHOP_KEEP });
     if (!shopKeep) {
       throw new NotFoundException('Shop keep not found');
@@ -32,18 +35,21 @@ export class CardSummaryService {
       dmlStatus: 1, // Set dml_status to 1 for insert
       shopKeepId: shopKeep,
       customerId: customer,
+      saleDate: new Date().toISOString(),
     });
 
     return this.cardSummaryRepository.save(cardSummary);
   }
 
   findAll(): Promise<CardSummary[]> {
-    return this.cardSummaryRepository.find({ where: { dmlStatus: Not(2) } });
+    return this.cardSummaryRepository.find({ where: { dmlStatus: Not(2) },
+    relations: ['shopKeepId','customerId','cardItemDetails'] });
   }
 
   async findOne(params: FindOneCardSummaryDto): Promise<CardSummary> {
     const category = await this.cardSummaryRepository.findOne({ 
-      where : {cardSummaryId: params?.cardSummaryId}   
+      where : {cardSummaryId: params?.cardSummaryId},
+    relations: ['shopKeepId','customerId','cardItemDetails']   
     });
     if (!category || category.dmlStatus === 2) {
       throw new NotFoundException(`Card summary with ID ${params.cardSummaryId} not found or has been deleted`);
@@ -106,6 +112,5 @@ export class CardSummaryService {
 
     res.dmlStatus = 2; // Set dml_status to 2 for delete
     await this.cardSummaryRepository.save(res);  
-    return this.cardSummaryRepository.find({ where: { dmlStatus: Not(2) } });
   }
 }

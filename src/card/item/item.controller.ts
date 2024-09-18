@@ -1,6 +1,7 @@
 // src/items/items.controller.ts
 
-import { Controller, Get, Post, Body, Patch, Param, Delete } from '@nestjs/common';
+import {Res, HttpStatus, Controller, Post, Body, NotFoundException, BadRequestException } from '@nestjs/common';
+import { Response } from 'express';
 import { ItemService } from './item.service';
 import { CreateItemDto } from './dto/create-item.dto';
 import { UpdateItemDto } from './dto/update-item.dto';
@@ -31,7 +32,14 @@ export class ItemsController {
   }
 
   @Post('deleteItem')
-  remove(@Body() findOneItemDto: FindOneItemDto) {
-    return this.itemService.remove(findOneItemDto);
+  async remove(@Body() findOneItemDto: FindOneItemDto, @Res() res: Response) {
+    try {
+      await this.itemService.remove(findOneItemDto);
+      return res.status(HttpStatus.OK).json({ message: 'Removed Successfully' });
+    } catch (error) {
+      if (error instanceof NotFoundException || error instanceof BadRequestException) {
+        throw error;
+      }
+    }
   }
 }

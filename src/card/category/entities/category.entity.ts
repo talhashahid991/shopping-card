@@ -1,6 +1,6 @@
 import { Entity, PrimaryGeneratedColumn, Column, OneToMany } from 'typeorm';
 import { IsNotEmpty } from 'class-validator';
-import { Item } from 'src/card/item/entities/item.entity';
+import { Item } from '../../item/entities/item.entity';
 
 @Entity()
 export class Category {

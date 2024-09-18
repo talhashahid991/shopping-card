@@ -10,9 +10,6 @@ export class CreateCardSummaryDto {
   @IsInt()
   customerId: number;
 
-  @IsDateString()
-  saleDate: string;
-
   @IsBoolean()
   soldStatus: boolean;
 }

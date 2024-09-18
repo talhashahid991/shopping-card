@@ -1,6 +1,6 @@
 import { Entity, PrimaryGeneratedColumn, Column, ManyToOne } from 'typeorm';
-import { CardSummary } from '../../card-summary/entities/card-summary.entity';
 import { Item } from '../../item/entities/item.entity';
+import { CardSummary } from '../../card-summary/entities/card-summary.entity';
 import { IsNotEmpty } from 'class-validator';
 
 
@@ -15,10 +15,11 @@ export class CardItemDetails {
   @ManyToOne(() => Item, item => item.cardItemDetails)
   item: Item;
 
-  @Column({name: 'item_price'})
-  itemPrice: number;
+  @Column({name: 'total_Amount'})
+  totalAmount: number;
 
   @Column({name: 'quantity'})
+  @IsNotEmpty()
   quantity: number;
 
   @Column({name: 'dml_status'})

@@ -1,4 +1,5 @@
-import { Controller, Get, Post, Body, Param, Delete, Put } from '@nestjs/common';
+import {Res, HttpStatus, NotFoundException, BadRequestException, Controller, Post, Body } from '@nestjs/common';
+import { Response } from 'express';
 import { CategoryService } from './category.service';
 import { CreateCategoryDto } from '../category/dto/create-category.dto';
 import { UpdateCategoryDto } from '../category/dto/update-category.dto';
@@ -30,7 +31,14 @@ export class CategoryController {
   }
 
   @Post('deleteCategory')
-  remove(@Body() findOneCategoryDto: FindOneCategoryDto) {
-    return this.categoryService.remove(findOneCategoryDto);
+  async remove(@Body() findOneCategoryDto: FindOneCategoryDto, @Res() res: Response) {
+    try {
+      await this.categoryService.remove(findOneCategoryDto);
+      return res.status(HttpStatus.OK).json({ message: 'Removed Successfully' });
+    } catch (error) {
+      if (error instanceof NotFoundException || error instanceof BadRequestException) {
+        throw error;
+      }
+    }
   }
 }

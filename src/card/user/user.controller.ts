@@ -1,4 +1,5 @@
-import { Controller, Post, Body } from '@nestjs/common';
+import {Res, HttpStatus, NotFoundException, BadRequestException, Controller, Post, Body } from '@nestjs/common';
+import { Response } from 'express';
 import { UserService } from './user.service';
 import { CreateUserDto } from './dto/create-user.dto';
 import { UpdateUserDto } from './dto/update-user.dto';
@@ -30,7 +31,14 @@ export class UserController {
   }
 
   @Post('deleteUser')
-  remove(@Body() findOneUserDto: FindOneUserDto) {
-    return this.userService.remove(findOneUserDto);
+  async remove(@Body() findOneUserDto: FindOneUserDto, @Res() res: Response) {
+    try {
+      await this.userService.remove(findOneUserDto);
+      return res.status(HttpStatus.OK).json({ message: 'Removed Successfully' });
+    } catch (error) {
+      if (error instanceof NotFoundException || error instanceof BadRequestException) {
+        throw error;
+      }
+    }
   }
 }

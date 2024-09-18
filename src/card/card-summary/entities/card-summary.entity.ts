@@ -10,10 +10,8 @@ export class CardSummary {
   cardSummaryId: number;
 
   @Column({name: 'total_amount'})
-  @IsNotEmpty()
   totalAmount: number;
 
-  
   @ManyToOne(() => User, user => user.shopKeeps)
   shopKeepId: User;
 

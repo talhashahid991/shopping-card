@@ -1,4 +1,5 @@
-import { Controller, Get, Post, Body, Param, Delete, Put } from '@nestjs/common';
+import {Res, HttpStatus, NotFoundException, BadRequestException, Controller, Post, Body } from '@nestjs/common';
+import { Response } from 'express';
 import { CardItemDetailsService } from './card-item-details.service';
 import { CreateCardItemDetailsDto } from './dto/create-card-item-detail.dto';
 import { UpdateCardItemDetailsDto } from './dto/update-card-item-details.dto';
@@ -30,7 +31,14 @@ export class CardItemDetailsController {
   }
 
   @Post('deleteCardItemDetail')
-  remove(@Body() findOneCardItemDetailDto: FindOneCardItemDetailDto) {
-    return this.cardItemDetailsService.remove(findOneCardItemDetailDto);
+  async remove(@Body() findOneCardItemDetailDto: FindOneCardItemDetailDto, @Res() res: Response) {
+    try {
+      await this.cardItemDetailsService.remove(findOneCardItemDetailDto);
+      return res.status(HttpStatus.OK).json({ message: 'Removed Successfully' });
+    } catch (error) {
+      if (error instanceof NotFoundException || error instanceof BadRequestException) {
+        throw error;
+      }
+    }
   }
 }

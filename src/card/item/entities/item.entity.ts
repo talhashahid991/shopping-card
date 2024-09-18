@@ -1,8 +1,9 @@
 import { Entity, PrimaryGeneratedColumn, Column, ManyToOne, OneToMany } from 'typeorm';
 
-import { CardItemDetails } from '../../card-item-detail/entities/card-item-detail.entity';
+
 import { IsNotEmpty } from 'class-validator';
-import { Category } from 'src/card/category/entities/category.entity';
+import { Category } from '../../category/entities/category.entity';
+import { CardItemDetails } from '../../card-item-detail/entities/card-item-detail.entity';
 
 @Entity()
 export class Item {

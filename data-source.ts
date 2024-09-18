@@ -1,9 +1,9 @@
 import { Category } from 'src/card/category/entities/category.entity';
-import { CardItemDetails } from 'src/card/card-item-detail/entities/card-item-detail.entity';
 import { CardSummary } from 'src/card/card-summary/entities/card-summary.entity';
 import { Item } from 'src/card/item/entities/item.entity';
 import { User } from 'src/card/user/entities/user.entity';
 import { DataSource } from 'typeorm';
+import { CardItemDetails } from 'src/card/card-item-detail/entities/card-item-detail.entity';
 
 
 export const AppDataSource = new DataSource({

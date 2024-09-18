@@ -63,12 +63,15 @@ export class ItemService {
 
 
   findAll(): Promise<Item[]> {
-    return this.itemsRepository.find({ where: { dmlStatus: Not(2) } });
+    return this.itemsRepository.find({   
+    where: { dmlStatus: Not(2) },
+    relations: ['categoryId']});
   }
 
   async findOne(params: FindOneItemDto): Promise<Item> {
     const user = await this.itemsRepository.findOne({ 
-      where : {itemId: params?.itemId}   
+      where : {itemId: params?.itemId},
+      relations: ['categoryId']   
     });
     if (!user || user.dmlStatus === 2) {
       throw new NotFoundException(`Item with ID ${params.itemId} not found or has been deleted`);
@@ -90,6 +93,5 @@ export class ItemService {
 
     res.dmlStatus = 2; // Set dml_status to 2 for delete
     await this.itemsRepository.save(res);  
-    return this.itemsRepository.find({ where: { dmlStatus: Not(2) } });
   }
 }
