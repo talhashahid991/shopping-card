@@ -1,10 +1,13 @@
-import {Res, HttpStatus, NotFoundException, BadRequestException, Controller, Post, Body } from '@nestjs/common';
+import { Res, HttpStatus, NotFoundException, BadRequestException, Controller, Post, Body, UseGuards } from '@nestjs/common';
 import { Response } from 'express';
 import { UserService } from './user.service';
 import { CreateUserDto } from './dto/create-user.dto';
 import { UpdateUserDto } from './dto/update-user.dto';
 import { FindOneUserDto } from './dto/findOne-user.dto';
 import { FindAllUserDto } from './dto/findAll-user.dto';
+import { RolesGuard } from '../../auth/roles-guard.guard';
+import { Role, Roles } from '../../auth/role.guard';
+import { JwtAuthGuard } from 'src/auth/jwt-auth.guard';
 
 
 @Controller('Users')
@@ -17,6 +20,8 @@ export class UserController {
   }
 
   @Post('findAll')
+  @UseGuards(JwtAuthGuard, RolesGuard)
+  @Roles(Role.Customer)
   findAll(@Body() findAllUserDto:FindAllUserDto) {
     return this.userService.findAll(findAllUserDto);
   }

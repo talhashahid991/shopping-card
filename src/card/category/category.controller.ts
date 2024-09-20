@@ -1,4 +1,4 @@
-import {Res, HttpStatus, NotFoundException, BadRequestException, Controller, Post, Body } from '@nestjs/common';
+import { Res, HttpStatus, NotFoundException, BadRequestException, Controller, Post, Body } from '@nestjs/common';
 import { Response } from 'express';
 import { CategoryService } from './category.service';
 import { CreateCategoryDto } from '../category/dto/create-category.dto';

@@ -8,7 +8,6 @@ import { CreateCardItemDetailsDto } from './dto/create-card-item-detail.dto';
 import { UpdateCardItemDetailsDto } from './dto/update-card-item-details.dto';
 import { FindOneCardItemDetailDto } from './dto/findOne-card-item-detail.dto';
 import { User, UserType } from '../user/entities/user.entity';
-import { PaginationDto } from '../utils/pagination.dto';
 import { FindAllCardItemDetailsDto } from './dto/findAll-card-item-detail.dto';
 
 

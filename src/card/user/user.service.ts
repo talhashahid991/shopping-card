@@ -18,6 +18,10 @@ export class UserService {
     private cardSummaryRepository: Repository<CardSummary>
   ) {}
 
+  async findOneByUsername(username: string): Promise<User | undefined> { //for authentication
+    return this.userRepository.findOne({ where: { username } });
+  }
+
   async create(createUserDto: CreateUserDto): Promise<User> {
       const user = this.userRepository.create({
         name: createUserDto.name,

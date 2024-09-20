@@ -9,6 +9,7 @@ import { CardSummaryModule } from './card/card-summary/card-summary.module';
 import { CardItemDetailsModule } from './card/card-item-detail/card-item-detail.module';
 import { UserModule } from './card/user/user.module';
 import { ItemModule } from './card/item/item.module';
+import { AuthModule } from './auth/auth.module';
 
 @Module({
   imports: [
@@ -34,7 +35,8 @@ ItemModule,
 CardItemDetailsModule,
 CategoryModule,
 CardSummaryModule,
-UserModule],
+UserModule,
+AuthModule],
   controllers: [AppController],
   providers: [AppService],
 })
