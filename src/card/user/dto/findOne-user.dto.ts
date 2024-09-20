@@ -1,5 +1,4 @@
-import { Type } from 'class-transformer';
-import { IsArray, IsNotEmpty, IsNumber, ValidateNested } from 'class-validator';
+import { IsNumber } from 'class-validator';
 
 export class FindOneUserDto {
   @IsNumber()

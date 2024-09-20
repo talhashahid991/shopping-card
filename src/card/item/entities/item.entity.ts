@@ -1,6 +1,4 @@
 import { Entity, PrimaryGeneratedColumn, Column, ManyToOne, OneToMany } from 'typeorm';
-
-
 import { IsNotEmpty } from 'class-validator';
 import { Category } from '../../category/entities/category.entity';
 import { CardItemDetails } from '../../card-item-detail/entities/card-item-detail.entity';

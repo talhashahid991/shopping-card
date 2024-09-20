@@ -1,4 +1,4 @@
-import { IsDecimal, IsInt, IsDate, IsBoolean, IsNumber, IsDateString } from 'class-validator';
+import { IsInt, IsBoolean, IsNumber } from 'class-validator';
 
 export class CreateCardSummaryDto {
   @IsNumber()

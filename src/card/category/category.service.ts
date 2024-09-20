@@ -1,11 +1,11 @@
 import { Injectable, NotFoundException, BadRequestException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { Repository, Not } from 'typeorm';
-
+import { Repository, Not, Like } from 'typeorm';
 import { CreateCategoryDto } from './dto/create-category.dto';
 import { UpdateCategoryDto } from './dto/update-category.dto';
 import { Category } from './entities/category.entity';
 import { FindOneCategoryDto } from './dto/findOne-category.dto';
+import { FindAllCategoryDto } from './dto/findAll-category.dto';
 
 
 @Injectable()
@@ -23,8 +23,23 @@ export class CategoryService {
     return this.categoriesRepository.save(category);
   }
 
-  findAll(): Promise<Category[]> {
-    return this.categoriesRepository.find({ where: { dmlStatus: Not(2) } });
+  async findAll(findAllCategoryDto:FindAllCategoryDto): Promise<{ data: Category[], count: number }> {
+    const page = findAllCategoryDto.page;
+    const limit = findAllCategoryDto.limit;
+    const { title, description} = findAllCategoryDto;
+    const offset = (page - 1) * limit;
+    const [data, count] = await this.categoriesRepository.findAndCount({
+      where: { dmlStatus: Not(2),
+        ...(title && { title: Like(`%${title}%`) }),
+        ...(description && { description: Like(`%${description}%`) }),
+       },
+      skip: offset,
+      take: limit,
+    });
+    if(data.length <= 0){
+      throw new NotFoundException('No records found.');
+    }
+    return { data, count };
   }
 
   async findOne(params: FindOneCategoryDto): Promise<Category> {

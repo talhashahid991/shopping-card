@@ -1,11 +1,12 @@
 import { Injectable, NotFoundException, BadRequestException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { Repository,Not } from 'typeorm';
+import { Repository,Not, Like,Equal } from 'typeorm';
 import { User, UserType } from '../user/entities/user.entity';
 import { CreateCardSummaryDto } from './dto/create-card-summary.dto';
 import { UpdateCardSummaryDto } from './dto/update-card-summary.dto';
 import { CardSummary } from './entities/card-summary.entity';
 import { FindOneCardSummaryDto } from './dto/findOne-card-summary.dto';
+import { FindAllCardSummaryDto } from './dto/findAll-card-summary.dto';
 
 @Injectable()
 export class CardSummaryService {
@@ -41,10 +42,28 @@ export class CardSummaryService {
     return this.cardSummaryRepository.save(cardSummary);
   }
 
-  findAll(): Promise<CardSummary[]> {
-    return this.cardSummaryRepository.find({ where: { dmlStatus: Not(2) },
-    relations: ['shopKeepId','customerId','cardItemDetails'] });
+  async findAll(findAllCardSummaryDto:FindAllCardSummaryDto): Promise<{ data: CardSummary[], count: number }> {
+    const page = findAllCardSummaryDto.page;
+    const limit = findAllCardSummaryDto.limit;
+    const { totalAmount, shopKeepId, customerId, soldStatus } = findAllCardSummaryDto;
+    const offset = (page - 1) * limit;
+    const [data, count] = await this.cardSummaryRepository.findAndCount({
+      where: { dmlStatus: Not(2),
+        ...(totalAmount && { totalAmount: Equal(totalAmount) }),
+        ...(customerId && { customerId: Equal(customerId) }),
+        ...(shopKeepId && { shopKeepId: Equal(shopKeepId) }),
+        ...(soldStatus /*!== undefined*/ && { soldStatus: Equal(soldStatus)})
+       },
+      relations: ['shopKeepId','customerId','cardItemDetails'],
+      skip: offset,
+      take: limit,
+    });
+    if(data.length <= 0){
+      throw new NotFoundException('No records found.');
+    }
+    return { data, count };
   }
+      
 
   async findOne(params: FindOneCardSummaryDto): Promise<CardSummary> {
     const category = await this.cardSummaryRepository.findOne({ 

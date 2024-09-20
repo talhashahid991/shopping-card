@@ -1,11 +1,12 @@
 import { BadRequestException, Injectable,NotFoundException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { Repository, Not } from 'typeorm';
+import { Repository, Not, Like } from 'typeorm';
 import { User } from './entities/user.entity';
 import { CreateUserDto } from './dto/create-user.dto';
 import { UpdateUserDto } from './dto/update-user.dto';
 import { CardSummary } from '../card-summary/entities/card-summary.entity';
 import { FindOneUserDto } from './dto/findOne-user.dto';
+import { FindAllUserDto } from './dto/findAll-user.dto';
 
 
 @Injectable()
@@ -69,8 +70,24 @@ export class UserService {
     }
 
 
-  findAll(): Promise<User[]> {
-    return this.userRepository.find({ where: { dmlStatus: Not(2) } });
+  async findAll(findAllUserDto:FindAllUserDto): Promise<{ data: User[], count: number }> {
+    const page = findAllUserDto.page;
+    const limit = findAllUserDto.limit;
+    const { name, username, userType } = findAllUserDto;
+    const offset = (page - 1) * limit;
+    const [data, count] = await this.userRepository.findAndCount({
+      where: { dmlStatus: Not(2),
+        ...(name && { name: Like(`%${name}%`) }),
+        ...(username && { username: Like(`%${username}%`) }),
+        ...(userType && { userType }),
+       },
+      skip: offset,
+      take: limit,
+    });
+    if(data.length <= 0){
+      throw new NotFoundException('No records found.');
+    }
+    return { data, count };
   }
 
   async findOne(params: FindOneUserDto): Promise<User> {

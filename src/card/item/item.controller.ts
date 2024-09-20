@@ -1,11 +1,10 @@
-// src/items/items.controller.ts
-
 import {Res, HttpStatus, Controller, Post, Body, NotFoundException, BadRequestException } from '@nestjs/common';
 import { Response } from 'express';
 import { ItemService } from './item.service';
 import { CreateItemDto } from './dto/create-item.dto';
 import { UpdateItemDto } from './dto/update-item.dto';
 import { FindOneItemDto } from './dto/findOne-item.dto';
+import { FindAllItemDto } from './dto/findAll-item.dto';
 
 @Controller('Items')
 export class ItemsController {
@@ -17,8 +16,8 @@ export class ItemsController {
   }
 
   @Post('findAll')
-  findAll() {
-    return this.itemService.findAll();
+  findAll(@Body() findAllItemDto:FindAllItemDto) {
+    return this.itemService.findAll(findAllItemDto);
   }
 
   @Post('findOne')

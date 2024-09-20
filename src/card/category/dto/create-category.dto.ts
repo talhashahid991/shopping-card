@@ -1,4 +1,4 @@
-import { IsString, IsInt, IsNumber } from 'class-validator';
+import { IsString } from 'class-validator';
 
 export class CreateCategoryDto {
   @IsString()

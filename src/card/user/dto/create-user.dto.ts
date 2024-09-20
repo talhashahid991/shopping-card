@@ -1,4 +1,4 @@
-import { IsString, IsInt, MinLength, MaxLength, Matches, IsNotEmpty, IsEnum, isNotEmpty } from 'class-validator';
+import { IsString, MinLength, MaxLength, Matches, IsNotEmpty, IsEnum } from 'class-validator';
 import { UserType } from '../entities/user.entity';
 
 export class CreateUserDto {

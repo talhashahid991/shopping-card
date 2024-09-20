@@ -1,12 +1,12 @@
 import { Injectable, NotFoundException, BadRequestException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { Repository, Not } from 'typeorm';
+import { Repository, Not, Like, Equal } from 'typeorm';
 import { Item } from './entities/item.entity';
 import { CreateItemDto } from './dto/create-item.dto';
 import { UpdateItemDto } from './dto/update-item.dto';
-
 import { FindOneItemDto } from './dto/findOne-item.dto';
 import { Category } from '../category/entities/category.entity';
+import { FindAllItemDto } from './dto/findAll-item.dto';
 
 @Injectable()
 export class ItemService {
@@ -61,12 +61,27 @@ export class ItemService {
     });
   }
 
-
-  findAll(): Promise<Item[]> {
-    return this.itemsRepository.find({   
-    where: { dmlStatus: Not(2) },
-    relations: ['categoryId']});
+  async findAll(findallItemDto: FindAllItemDto): Promise<{ data: Item[], count: number }> {
+    const page = findallItemDto.page;
+    const limit = findallItemDto.limit;
+    const { itemName, price, categoryId } = findallItemDto;
+    const offset = (page - 1) * limit;
+    const [data, count] = await this.itemsRepository.findAndCount({
+      where: { dmlStatus: Not(2),
+        ...(itemName && { itemName: Like(`%${itemName}%`) }),
+        ...(price && { price: Equal(price) }),
+        ...(categoryId && { categoryId: Equal(categoryId) }),
+       },
+      relations: ['categoryId'],
+      skip: offset,
+      take: limit,
+    });
+    if(data.length <= 0){
+      throw new NotFoundException('No records found.');
+    }
+    return { data, count };
   }
+     
 
   async findOne(params: FindOneItemDto): Promise<Item> {
     const user = await this.itemsRepository.findOne({ 

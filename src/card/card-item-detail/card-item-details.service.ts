@@ -1,6 +1,6 @@
 import { Injectable, NotFoundException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { Repository, Not } from 'typeorm';
+import { Repository, Not,Equal } from 'typeorm';
 import { CardItemDetails } from './entities/card-item-detail.entity';
 import { CardSummary } from '../card-summary/entities/card-summary.entity';
 import { Item } from '../item/entities/item.entity';
@@ -8,6 +8,8 @@ import { CreateCardItemDetailsDto } from './dto/create-card-item-detail.dto';
 import { UpdateCardItemDetailsDto } from './dto/update-card-item-details.dto';
 import { FindOneCardItemDetailDto } from './dto/findOne-card-item-detail.dto';
 import { User, UserType } from '../user/entities/user.entity';
+import { PaginationDto } from '../utils/pagination.dto';
+import { FindAllCardItemDetailsDto } from './dto/findAll-card-item-detail.dto';
 
 
 @Injectable()
@@ -87,12 +89,29 @@ export class CardItemDetailsService {
     return cardItemDetail;
   }
 
-  findAll(): Promise<CardItemDetails[]> {
-    return this.cardItemDetailsRepository.find({   
-      where: { dmlStatus: Not(2) },
+  async findAll(findAllCardItemDetailsDto:FindAllCardItemDetailsDto): Promise<{ data: CardItemDetails[], count: number }> {
+    const page = findAllCardItemDetailsDto.page;
+    const limit = findAllCardItemDetailsDto.limit;
+    const { cardSummaryId, shopKeepId, customerId, itemId, totalAmount, quantity } = findAllCardItemDetailsDto;
+    const offset = (page - 1) * limit;
+    const [data, count] = await this.cardItemDetailsRepository.findAndCount({
+      where: { dmlStatus: Not(2),
+        ...(cardSummaryId && { cardSummary: Equal(cardSummaryId) }),
+        ...(itemId && { item: Equal(itemId) }),
+        ...(totalAmount && { totalAmount: Equal(totalAmount) }),
+        ...(quantity && { quantity: Equal(quantity) }),
+       },
       relations: ['item','cardSummary'],
+      skip: offset,
+      take: limit,
     });
-  }
+    if(data.length <= 0){
+      throw new NotFoundException('No records found.');
+    }
+    return { data, count };
+  } 
+      
+
 
   async findOne(params: FindOneCardItemDetailDto): Promise<CardItemDetails> {
     const category = await this.cardItemDetailsRepository.findOne({ 

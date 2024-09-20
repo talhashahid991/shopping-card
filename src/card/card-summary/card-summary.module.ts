@@ -1,5 +1,3 @@
-// src/card-summary/card-summary.module.ts
-
 import { forwardRef, Module } from '@nestjs/common';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { CardSummary } from './entities/card-summary.entity';

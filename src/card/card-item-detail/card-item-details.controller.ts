@@ -1,9 +1,10 @@
-import {Res, HttpStatus, NotFoundException, BadRequestException, Controller, Post, Body } from '@nestjs/common';
+import { Res, HttpStatus, NotFoundException, BadRequestException, Controller, Post, Body } from '@nestjs/common';
 import { Response } from 'express';
 import { CardItemDetailsService } from './card-item-details.service';
 import { CreateCardItemDetailsDto } from './dto/create-card-item-detail.dto';
 import { UpdateCardItemDetailsDto } from './dto/update-card-item-details.dto';
 import { FindOneCardItemDetailDto } from './dto/findOne-card-item-detail.dto';
+import { FindAllCardItemDetailsDto } from './dto/findAll-card-item-detail.dto';
 
 
 @Controller('CardItemDetail')
@@ -16,8 +17,8 @@ export class CardItemDetailsController {
   }
 
   @Post('findAll')
-  findAll() {
-    return this.cardItemDetailsService.findAll();
+  findAll(@Body() findAllCardItemDetailsDto:FindAllCardItemDetailsDto) {
+    return this.cardItemDetailsService.findAll(findAllCardItemDetailsDto);
   }
 
   @Post('findOne')

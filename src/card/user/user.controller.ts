@@ -4,6 +4,7 @@ import { UserService } from './user.service';
 import { CreateUserDto } from './dto/create-user.dto';
 import { UpdateUserDto } from './dto/update-user.dto';
 import { FindOneUserDto } from './dto/findOne-user.dto';
+import { FindAllUserDto } from './dto/findAll-user.dto';
 
 
 @Controller('Users')
@@ -16,8 +17,8 @@ export class UserController {
   }
 
   @Post('findAll')
-  findAll() {
-    return this.userService.findAll();
+  findAll(@Body() findAllUserDto:FindAllUserDto) {
+    return this.userService.findAll(findAllUserDto);
   }
 
   @Post('findOne')
