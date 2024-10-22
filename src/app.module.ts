@@ -4,11 +4,11 @@ import { AppService } from './app.service';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { ConfigModule, ConfigService } from '@nestjs/config';
 import { join } from 'path';
-import { CategoryModule } from './card/category/category.module';
-import { CardSummaryModule } from './card/card-summary/card-summary.module';
-import { CardItemDetailsModule } from './card/card-item-detail/card-item-detail.module';
-import { UserModule } from './card/user/user.module';
-import { ItemModule } from './card/item/item.module';
+import { CategoryModule } from './cart/category/category.module';
+import { CartSummaryModule } from './cart/cart-summary/cart-summary.module';
+import { CartItemDetailsModule } from './cart/cart-item-detail/cart-item-detail.module';
+import { UserModule } from './cart/user/user.module';
+import { ItemModule } from './cart/item/item.module';
 import { AuthModule } from './auth/auth.module';
 
 @Module({
@@ -32,9 +32,9 @@ autoLoadEntities: true, //tables werent being created without using this!!
 }),
     
 ItemModule,
-CardItemDetailsModule,
+CartItemDetailsModule,
 CategoryModule,
-CardSummaryModule,
+CartSummaryModule,
 UserModule,
 AuthModule],
   controllers: [AppController],
